@@ -2,13 +2,13 @@
 @if (_chargers.length) {
   <table class="table table-striped table-bordered table-hover">
     <thead>
-    <tr>
-      <th>Charger ID</th>
-      <th>Charger Name</th>
-      <th>EV ID</th>
-      <th>EV Name</th>
-      <th>Action</th>
-    </tr>
+      <tr>
+        <th>Charger ID</th>
+        <th>Charger Name</th>
+        <th>EV ID</th>
+        <th>EV Name</th>
+        <th>Action</th>
+      </tr>
     </thead>
     <tbody>
       @for (charger of _chargers; track charger.id) {

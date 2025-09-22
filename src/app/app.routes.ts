@@ -23,5 +23,6 @@ export const routes: Routes = [
     loadChildren: async () =>
       (await import('./features/status/status.routes')).STATUS_ROUTES,
     data: { title: '🔄 Charging Status' }
-  },
+  }
+  // TODO: To add a route for a not found page
 ];

@@ -24,17 +24,15 @@ export class PlugService {
   plugIn(chargerId: string, evId: string): void {
     const prev = this.getPluggedEvId(chargerId);
 
-    this.applyLocal(chargerId, evId);
+    this.updateLocal(chargerId, evId);
 
     this.patch(chargerId, evId).subscribe({
       next: updated => {
-        this.mergeServer(updated);
+        this.updateLocal(updated.chargerId ?? (updated as any).id, updated.evId ?? null);
         this.messages.show('success', `✅ EV ${evId} plugged into charger ${chargerId}.`);
       },
       error: err => {
-        if (this.getPluggedEvId(chargerId) === evId) {
-          this.applyLocal(chargerId, prev);
-        }
+        this.updateLocal(chargerId, prev);
         console.error('plugIn failed', err);
         this.messages.show('error', '❌ Failed to plug in. Please try again.');
       }
@@ -44,17 +42,15 @@ export class PlugService {
   plugOut(chargerId: string): void {
     const prev = this.getPluggedEvId(chargerId);
 
-    this.applyLocal(chargerId, null);
+    this.updateLocal(chargerId, null);
 
     this.patch(chargerId, null).subscribe({
       next: updated => {
-        this.mergeServer(updated);
+        this.updateLocal(updated.chargerId ?? (updated as any).id, updated.evId ?? null);
         this.messages.show('info', `ℹ️ Charger ${chargerId} unplugged.`);
       },
       error: err => {
-        if (this.getPluggedEvId(chargerId) === null) {
-          this.applyLocal(chargerId, prev);
-        }
+        this.updateLocal(chargerId, prev);
         console.error('plugOut failed', err);
         this.messages.show('error', '❌ Failed to plug out. Please try again.');
       }
@@ -62,7 +58,6 @@ export class PlugService {
   }
 
   getPluggedEvId(chargerId: string): string | null {
-    // Could have been done via httpClient
     return this._plugStatus().find(p => p.chargerId === chargerId)?.evId ?? null;
   }
 
@@ -77,35 +72,14 @@ export class PlugService {
     );
   }
 
-  private applyLocal(chargerId: string, evId: string | null): void {
-    let found = false;
+  private updateLocal(chargerId: string, evId: string | null): void {
     this._plugStatus.update(list => {
-      const next = list.map(s => {
-        if (s.chargerId === chargerId || (s as any).id === chargerId) {
-          found = true;
-          return { ...s, evId };
-        }
-        return s;
-      });
-      return next;
-    });
-    if (!found) {
-      this._plugStatus.update(list => [...list, { chargerId, evId }]);
-    }
-  }
-
-  private mergeServer(updated: PlugStatus): void {
-    const chargerKey = (updated as any).chargerId ?? (updated as any).id;
-    const normalized: PlugStatus = {
-      chargerId: chargerKey,
-      evId: (updated as any).evId ?? null
-    };
-
-    this._plugStatus.update(list => {
-      const idx = list.findIndex(s => s.chargerId === chargerKey);
-      if (idx === -1) return [...list, normalized];
+      const idx = list.findIndex(s => s.chargerId === chargerId || (s as any).id === chargerId);
+      if (idx === -1) {
+        return [...list, { chargerId, evId }];
+      }
       const next = list.slice();
-      next[idx] = { ...list[idx], evId: normalized.evId };
+      next[idx] = { ...list[idx], evId };
       return next;
     });
   }

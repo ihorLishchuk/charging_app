@@ -9,10 +9,12 @@ export class EVService {
   private readonly _http = inject(HttpClient);
   private readonly _evs = signal<EV[]>([]);
 
+  private readonly API = 'http://localhost:3000/evs';
+
   readonly evs = computed(() => this._evs());
 
   loadEVs(): Observable<EV[]> {
-    return this._http.get<EV[]>('http://localhost:3000/evs')
+    return this._http.get<EV[]>(this.API)
       .pipe(tap(data => this._evs.set(data)));
   }
 
