@@ -1,0 +1,24 @@
+<div class="modal-overlay" fxLayout="row" fxLayoutAlign="center center">
+  <div class="modal-content p-4" fxLayout="column" fxLayoutGap="15px">
+    <h3>Select EV to plug in</h3>
+
+    <select
+      class="form-select"
+      [(ngModel)]="selectedEvId"
+    >
+      <option [value]="null" disabled>Select an EV</option>
+      @for (ev of evs(); track ev.id) {
+        <option [value]="ev.id">
+          {{ ev.name }} ({{ ev.capacity }})
+        </option>
+      }
+    </select>
+
+    <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
+      <button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+      <button class="btn btn-primary" [disabled]="!selectedEvId" (click)="onConfirm()">
+        Confirm
+      </button>
+    </div>
+  </div>
+</div>

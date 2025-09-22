@@ -1,0 +1,23 @@
+@let _chargers = chargers();
+@if (_chargers.length) {
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Max Rate</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (charger of _chargers; track charger.id) {
+        <tr>
+          <td>{{ charger.id }}</td>
+          <td>{{ charger.name }}</td>
+          <td>{{ charger.maxRate }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else {
+  <span>No Data</span>
+}

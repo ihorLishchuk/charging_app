@@ -1,0 +1,23 @@
+@let _evs = evs();
+@if (_evs?.length) {
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Battery Capacity</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (ev of _evs; track ev.id) {
+        <tr>
+          <td>{{ ev.id }}</td>
+          <td>{{ ev.name }}</td>
+          <td>{{ ev.capacity }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else {
+  <span>No Data</span>
+}

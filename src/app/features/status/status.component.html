@@ -1,0 +1,54 @@
+@let _chargers = chargers();
+@if (_chargers.length) {
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>Charger ID</th>
+      <th>Charger Name</th>
+      <th>EV ID</th>
+      <th>EV Name</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (charger of _chargers; track charger.id) {
+        @let _isPluggedIn = isPluggedIn(charger.id);
+        <tr>
+          <td>{{ charger.id }}</td>
+          <td>{{ charger.name }}</td>
+          @let ev = chargerRelatedEV(charger.id);
+          <td>
+            {{ _isPluggedIn && ev?.id ? ev!.id : '-' }}
+          </td>
+          <td>
+            {{ _isPluggedIn && ev?.name ? ev!.name : '-' }}
+          </td>
+          <td>
+            @if (_isPluggedIn) {
+              <button
+                class="btn btn-sm btn-outline-danger"
+                (click)="plugOut(charger.id)">
+                Plug Out
+              </button>
+            } @else {
+              <button
+                class="btn btn-sm btn-outline-primary"
+                (click)="openModal(charger.id)">
+                Plug In
+              </button>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (visibleModal()) {
+    <app-ev-plug-in-modal
+      (evSelected)="handlePlug($event)"
+      (cancel)="closeModal()"
+    />
+  }
+} @else {
+  <span>No Data</span>
+}

@@ -1,0 +1,38 @@
+{
+  "chargers": [
+    {
+      "id": "1",
+      "name": "Heliox-C1",
+      "maxRate": "50kW"
+    },
+    {
+      "id": "2",
+      "name": "Heliox-C2",
+      "maxRate": "100kW"
+    }
+  ],
+  "evs": [
+    {
+      "id": "1",
+      "name": "VW-Golf",
+      "capacity": "500kWh"
+    },
+    {
+      "id": "2",
+      "name": "VW-POLO",
+      "capacity": "1000kWh"
+    }
+  ],
+  "plugged-in-chargers": [
+    {
+      "id": "1",
+      "chargerId": "1",
+      "evId": "2"
+    },
+    {
+      "id": "2",
+      "chargerId": "2",
+      "evId": null
+    }
+  ]
+}
