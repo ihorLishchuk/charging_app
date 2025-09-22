@@ -27,12 +27,12 @@
     {
       "id": "1",
       "chargerId": "1",
-      "evId": "2"
+      "evId": null
     },
     {
       "id": "2",
       "chargerId": "2",
-      "evId": null
+      "evId": "1"
     }
   ]
 }

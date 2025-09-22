@@ -1,12 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
+
 import { MessageService, TitleService } from './services';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [NgClass, RouterModule],
   template: `
     <!-- TODO: Move the navigation to a separate component -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
@@ -28,6 +29,7 @@ import { MessageService, TitleService } from './services';
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   readonly titleService = inject(TitleService);
